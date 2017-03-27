@@ -68,6 +68,163 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python webdriver环境配置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/27/python webdriver环境配置/" class="article-date">
+  <time datetime="2017-03-27T07:04:42.374Z" itemprop="datePublished">2017-03-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="配置python-webdriver运行环境"><a href="#配置python-webdriver运行环境" class="headerlink" title="配置python webdriver运行环境"></a>配置python webdriver运行环境</h1><p>WebDriver是主流Web应用自动化测试框架，具有清晰面向对象 API，能以最佳的方式与浏览器进行交互。</p>
+<p>Selenium WebDriver 又称为 Selenium2。</p>
+<p>Selenium 1 + WebDriver = Selenium 2</p>
+<h3 id="文章背景"><a href="#文章背景" class="headerlink" title="文章背景"></a>文章背景</h3><p>最近接到了一个为其他组同事写个自动控制网站的工具，原本是要用chrome插件的方式来控制网站，研究了一周的时间，然而呢，狗血的事情发生了，结果高通的这个网站用到了java小程序-applet这个东西，他需要浏览器有java环境，NPAPI是java小程序依赖的一个东西，chrome浏览器已经从2015年的4月发布的42版本开始就不支持java jre环境了，网上资料说到45版本之前还可以通过启用插件的方式来弥补，不过现在已经是57版本了，太老的chrome版本根本不能用了，所以只能换一种方式来实现工具的功能。知道兄弟我当时的艰辛了吧，这个工具恐怕做不出来，晚上睡觉都在想！好了，开始步入正题：</p>
+<p>在网上找webdriver配置的文档没有一个特别全的，所以我们就总结的细一点，从安装python开始，一步一步完成：</p>
+<h4 id="安装pyenv"><a href="#安装pyenv" class="headerlink" title="安装pyenv"></a>安装pyenv</h4><p>pyenv是一个Python的一个版本管理器，有时你需要在系统中安装多个Python，但又不能影响系统自带的Python，即需要实现Python的多版本共存。pyenv就是这样一个Python版本管理器。</p>
+<p>在终端执行如下命令以安装pyenv及其插件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash</div></pre></td></tr></table></figure></p>
+<p>安装完成后，根据提示将如下语句加入到～/.bashrc中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export PYENV_ROOT=&quot;$HOME/.pyenv&quot;</div><div class="line">export PATH=&quot;$PYENV_ROOT/bin:$PATH&quot;</div><div class="line">eval &quot;$(pyenv init -)&quot;</div><div class="line">eval &quot;$(pyenv virtualenv-init -)&quot;   # 这句可以不加</div></pre></td></tr></table></figure>
+<p>然后重启终端即可。  也可以不用重启终端，执行下sourse  ~/.bashrc。<br>source命令也称为“点命令”，也就是一个点符号（.）。source命令通常用于重新执行刚修改的初始化文件，使之立即生效，而不必注销并重新登录。</p>
+<h4 id="安装Python"><a href="#安装Python" class="headerlink" title="安装Python"></a>安装Python</h4><h5 id="查看可以安装的版本"><a href="#查看可以安装的版本" class="headerlink" title="查看可以安装的版本"></a>查看可以安装的版本</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pyenv install --list</div></pre></td></tr></table></figure>
+<p>该命令会列出可以用 pyenv 安装的 Python 版本，列表可能会很长。<br>其中 2.7.8 和 3.4.1 这种只有版本号的是 Python 官方版本，其他的形如 anaconda2-4.1.0 这种既有名称又有版本后的属于 “衍生版” 或发行版。</p>
+<h5 id="安装-Python-的依赖包"><a href="#安装-Python-的依赖包" class="headerlink" title="安装 Python 的依赖包"></a>安装 Python 的依赖包</h5><p>在编译 Python 过程中会依赖一些其他库文件，因而需要首先安装这些库文件，已知的一些需要预先安装的库如下。</p>
+<p>在 Ubuntu下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div><div class="line">sudo apt-get install make build-essential libssl-dev zlib1g-dev</div><div class="line">sudo apt-get install libbz2-dev libreadline-dev libsqlite3-dev wget curl</div><div class="line">sudo apt-get install llvm libncurses5-dev libncursesw5-dev</div></pre></td></tr></table></figure></p>
+<h5 id="安装指定版本"><a href="#安装指定版本" class="headerlink" title="安装指定版本"></a>安装指定版本</h5><p>用户可以使用 pyenv install 安装指定版本的 python。<br>这里我们安装2.7.13版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pyenv install 2.7.13</div></pre></td></tr></table></figure></p>
+<p>执行该命令后，会从给定的网址中下载安装文件，但由于文件很大通常需要等一段时间。</p>
+<p>#####更新数据库<br>在安装Python或者其他带有可执行文件的模块之后，需要对数据库进行更新：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ pyenv rehash</div></pre></td></tr></table></figure></p>
+<h5 id="查看当前已安装的python版本："><a href="#查看当前已安装的python版本：" class="headerlink" title="查看当前已安装的python版本："></a>查看当前已安装的python版本：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ pyenv versions</div><div class="line">* system (set by /home/seisman/.pyenv/version)</div><div class="line">2.7.13</div></pre></td></tr></table></figure>
+<p>其中的星号表示当前正在使用的python。</p>
+<h5 id="设置全局的python版本"><a href="#设置全局的python版本" class="headerlink" title="设置全局的python版本"></a>设置全局的python版本</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ pyenv global 2.7.13</div><div class="line">$ pyenv versions</div><div class="line">system</div><div class="line">*2.7.13</div></pre></td></tr></table></figure>
+<p>现在全局的python笨笨就被修改成了2.7.13。也可以使用pyenv local 或 pyenv shell 临时改变 python 版本，不过这里不多说，我暂时也没功夫去研究这个。</p>
+<h5 id="确认python版本"><a href="#确认python版本" class="headerlink" title="确认python版本"></a>确认python版本</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ python</div></pre></td></tr></table></figure>
+<p>然后你可以看在用的python版本</p>
+<h5 id="使用python"><a href="#使用python" class="headerlink" title="使用python"></a>使用python</h5><ol>
+<li>输入 python 即可使用新版本的 python；</li>
+<li>系统自带的脚本会以 /usr/bin/python 的方式直接调用老版本的 python，因而不会对系统脚本产生影响；</li>
+<li>使用 pip 安装第三方模块时会自动按照到当前的python版本下，不会和系统模块发生冲突。</li>
+<li>使用 pip 安装模块后，可能需要执行 pyenv rehash 更新数据库；</li>
+</ol>
+<p>####pyenv其他功能</p>
+<ol>
+<li>pyenv uninstall 卸载某个版本</li>
+<li>pyenv update 更新 pyenv 及其插件</li>
+</ol>
+<h4 id="安装selenium包"><a href="#安装selenium包" class="headerlink" title="安装selenium包"></a>安装selenium包</h4><p>命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install selenium</div></pre></td></tr></table></figure></p>
+<p>需要注意：</p>
+<ol>
+<li>pip是python中安装包的工具；</li>
+<li>使用 pip 安装第三方模块时会自动按照到当前的python版本下，不会和系统模块发生冲突；</li>
+<li>使用 pip 安装模块后，可能需要执行 pyenv rehash 更新数据库。<br>这个包就下载到了该python环境下。</li>
+</ol>
+<h4 id="执行实例程序"><a href="#执行实例程序" class="headerlink" title="执行实例程序"></a>执行实例程序</h4><p>配置完这些东西后呢，我们就可以走到执行实例的步骤了，不过还是会有一些坑的，下面接着踩！</p>
+<p>准备好一个测试的.py执行文件：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</div><div class="line"><span class="keyword">from</span> selenium.webdriver.common.keys <span class="keyword">import</span> Keys</div><div class="line"></div><div class="line">driver = webdriver.Firefox()</div><div class="line">driver.get(<span class="string">"http://www.python.org"</span>)</div></pre></td></tr></table></figure></p>
+<p>这几行代码的意思很简单，就是引入webdriver,然后打开fireFox浏览器的一个python官网<br>然后我们执行这个文件，执行的方式就无所谓了，反正就是执行了就ok，不管是在命令行以python命令的方式还是某个IDE的编译方式都没有关系。</p>
+<p>在运行了之后呢，可能会报些错误，下面这个是我遇到的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">selenium.common.exceptions.WebDriverException: Message: &apos;geckodriver&apos; executable needs to be in PATH.</div></pre></td></tr></table></figure></p>
+<p>这是什么原因呢？</p>
+<p>其实就是安装的selenium的版本在3或者以上的话，需要一个geckodriver这个程序，而且要把它放在path中<br>geckodriver的下载地址：<em> <a href="https://github.com/mozilla/geckodriver/releases" target="_blank" rel="external">https://github.com/mozilla/geckodriver/releases</a> </em><br>linux系统的话下载后直接把程序放到path目录内就可以了。可以放到/usr/bin目录下</p>
+<p>这时我们再运行下执行文件，没有其他错误的话应该就会看到firefox打开了python的官网。</p>
+<p>这样我们的webdriver使用python的运行环境就搭建好了，接下来就是写你的自定义的代码，解决你想要的问题了，后续的话我也会写一篇关于编写自己的工具的方法。</p>
+<p>谢谢！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/27/python webdriver环境配置/" data-id="cj0rrqm8d0001afl7utnnohn3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-java学习总结(数组,方法)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/27/java学习总结(数组,方法)/" class="article-date">
+  <time datetime="2017-03-27T07:03:48.654Z" itemprop="datePublished">2017-03-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java相关/">java相关</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/27/java学习总结(数组,方法)/">java学习总结(数组,方法)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="java学习总结-数组-方法"><a href="#java学习总结-数组-方法" class="headerlink" title="java学习总结(数组,方法)"></a>java学习总结(数组,方法)</h2><h3 id="一-数组"><a href="#一-数组" class="headerlink" title="一.数组"></a>一.数组</h3><h4 id="1-1-数组的声明"><a href="#1-1-数组的声明" class="headerlink" title="1.1.数组的声明"></a>1.1.数组的声明</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">数据类型[ ] 数组名;   <span class="comment">//或者: 数据类型 数组名[ ];</span></div></pre></td></tr></table></figure>
+<h4 id="1-2-为数组分配空间"><a href="#1-2-为数组分配空间" class="headerlink" title="1.2.为数组分配空间"></a>1.2.为数组分配空间</h4><p>声明了数组之后需要给数组分配空间,也就是定义多大的数组.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">数组名 = new 数据类型 [数组长度];</div></pre></td></tr></table></figure>
+<p>数组长度就是数组最多存放元素的个数.也可以在声明数组的时候进行初始化数组,或者在声明的时候为它分配好空间,这样就可以不用再为数组分配空间.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> wangxu []  = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;;</div><div class="line"><span class="keyword">int</span> wangxu [] = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">10</span>];</div></pre></td></tr></table></figure>
+<h4 id="1-3-一维数组"><a href="#1-3-一维数组" class="headerlink" title="1.3.一维数组"></a>1.3.一维数组</h4><ul>
+<li>数组下表从0开始,所以数组的下标范围是0~数组长度-1.</li>
+<li>数组不能越界访问,否则会报错.</li>
+</ul>
+<p>#####java中的foreach:<br>我们经常在遍历数组的时候会用到foreach循环,for语句在数组内可以使用特殊简化版本,在遍历数组或者集合时,foreach更加简单便捷.从英文字面意思理解foreach也就是”for”每一个的意思.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for(元素类型 元素变量:遍历对象) &#123;</div><div class="line">	执行的代码</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">	public static void main (String[] args)&#123;</div><div class="line">		int happiness [] = &#123;1,2,3,4,5,6,7,8,9,10&#125;;</div><div class="line">		for(int happy:happiness) &#123;</div><div class="line">			System.out.println(happy);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="1-4-二维数组"><a href="#1-4-二维数组" class="headerlink" title="1.4.二维数组"></a>1.4.二维数组</h3><p>二维数组也需要声明和分配空间</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">数据类型 数组名 [][] = <span class="keyword">new</span> 数据类型[行数][列数];</div><div class="line"></div><div class="line"><span class="comment">//或者</span></div><div class="line">数据类型 数组名 [][] ;</div><div class="line">数组名 = <span class="keyword">new</span> 数据类型[][];</div><div class="line"></div><div class="line"><span class="comment">//再或者</span></div><div class="line">数据类型 数组名[][] = &#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>, ... &#125;, &#123;<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>, ... &#125;, ...&#125;;</div><div class="line"></div><div class="line"><span class="comment">//二维数组的访问与一维数组类似,可以通过下标来逐个赋值和访问,注意索引从0开始</span></div></pre></td></tr></table></figure>
+<p>二维数组经常用两层循环来遍历:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">String [][] name = &#123;&#123;<span class="string">"ZhaoYi"</span>, <span class="string">"QianEr"</span>, <span class="string">"SunSan"</span>&#125;,</div><div class="line">            &#123;<span class="string">"LiSi"</span>, <span class="string">"ZhouWu"</span>, <span class="string">"WuLiu"</span>&#125;&#125;;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++)&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">3</span>; j++)&#123;</div><div class="line">            System.out.println(name[i][j] );</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="二-方法"><a href="#二-方法" class="headerlink" title="二.方法"></a>二.方法</h3><h4 id="2-1-方法重载"><a href="#2-1-方法重载" class="headerlink" title="2.1 方法重载"></a>2.1 方法重载</h4><p>方法名相同但是参数列表不同(参数的个数和参数的类型不同)来实现方法的重载.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"i="</span> + i);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">float</span> f)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"f="</span> + f);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"s="</span> + s);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(String s1, String s2)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"s1+s2="</span>+(s1+s2));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(String s, <span class="keyword">int</span> i)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"s="</span>+s+<span class="string">",i="</span>+i);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Test test = <span class="keyword">new</span> Test();</div><div class="line">        test.f(<span class="number">3456</span>);</div><div class="line">        test.f(<span class="number">34.56f</span>);</div><div class="line">        test.f(<span class="string">"abc"</span>);</div><div class="line">        test.f(<span class="string">"abc"</span>,<span class="string">"def"</span>);</div><div class="line">        test.f(<span class="string">"abc"</span>,<span class="number">3456</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>方法重载要注意以下规则:</p>
+<ul>
+<li>在使用方法重载的时候,必须通过方法中不同的参数列表来实现方法的重载. 如:方法的参数个数不同或者方法的参数类型不同.</li>
+<li>不能通过访问权限,返回值类型和抛出的异常来实现重载.</li>
+<li>重载的方法中允许抛出不同的异常.</li>
+<li>可以有不同的返回值类型,只要方法的参数列表不同即可.</li>
+<li>可以有不同的访问修饰符.</li>
+</ul>
+<p>其实说了这么多的废话总之就是一句: 参数个数或者参数类型不同即可!!!</p>
+<h4 id="2-2-返回值"><a href="#2-2-返回值" class="headerlink" title="2.2 返回值"></a>2.2 返回值</h4><p>如上面的例子所示，方法是一个实现了条件输入和结果输出的过程，往往我们需要对方法的结果进行进一步的处理，这时候我们就需要方法返回值了。</p>
+<p>注意：</p>
+<ol>
+<li><p>如果方法的返回类型为 void ，则方法中不能使用 return 返回值。</p>
+</li>
+<li><p>方法的返回值最多只能有一个，不能返回多个值。</p>
+</li>
+<li><p>方法返回值的类型必须兼容，也就是说如果返回值类型为 int ，则不能返回 String 型值</p>
+</li>
+<li><p>调用带返回值的方法时，由于方法执行后会返回一个结果，因此在调用带返回值方法时一般都会接收其返回值并进行处理</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/27/java学习总结(数组,方法)/" data-id="cj0rrqm890000afl7qmz94u1a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/学习/">学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-java学习总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/10/java学习总结/" class="article-date">
@@ -422,7 +579,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/学习/" style="font-size: 10px;">学习</a> <a href="/tags/浏览器/" style="font-size: 10px;">浏览器</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/自己/" style="font-size: 10px;">自己</a>
+      <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/学习/" style="font-size: 20px;">学习</a> <a href="/tags/浏览器/" style="font-size: 10px;">浏览器</a> <a href="/tags/生活/" style="font-size: 10px;">生活</a> <a href="/tags/自己/" style="font-size: 10px;">自己</a>
     </div>
   </div>
 
@@ -444,6 +601,14 @@
       <ul>
         
           <li>
+            <a href="/2017/03/27/python webdriver环境配置/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/27/java学习总结(数组,方法)/">java学习总结(数组,方法)</a>
+          </li>
+        
+          <li>
             <a href="/2017/03/10/java学习总结/">java学习总结(基础语法)</a>
           </li>
         
@@ -453,14 +618,6 @@
         
           <li>
             <a href="/2017/02/24/文件管理系统使用案例/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/21/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2016/12/10/aboutMe/">About Me</a>
           </li>
         
       </ul>
